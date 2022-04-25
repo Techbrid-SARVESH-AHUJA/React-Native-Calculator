@@ -4,18 +4,8 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import HomeScreen from './screens/Home'
-import DetailsScreen from './screens/Details'
-
-const YourApp = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>
-        Try editing me! 🎉
-      </Text>
-    </View>
-  );
-}
+import CalculatorScreen from './screens/Main_Calculator'
+import ChangeBackgroundScreen from './screens/Change_BG'
 
 const Stack = createStackNavigator();
 
@@ -24,11 +14,11 @@ const MyStack = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Welcome' }}
+          name="Calculator_Screen"
+          component={CalculatorScreen}
+          options={{ title: 'Main Calculator Screen' }}
         />
-        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="Change_Background_Screen" component={ChangeBackgroundScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
