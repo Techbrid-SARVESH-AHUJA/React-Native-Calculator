@@ -23,6 +23,7 @@ const bgimg = require('../assets/mybg.webp');
 // const bgimg = { uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Salto_del_Angel-Canaima-Venezuela08.JPG/1200px-Salto_del_Angel-Canaima-Venezuela08.JPG" };
 const img = require('../assets/mybg1.webp');
 const img1 = require('../assets/mybg.webp');
+const imgico = require('../assets/imageicon.png');
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -159,7 +160,8 @@ class Calculator extends React.Component {
             global.after = global.after+global.aft[i]
         }
 
-        const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "", "undefined"]
+        // const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "", "undefined"]
+        const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         const operators = ["+", "-", "×", "÷"]
 
         console.log("global.before")
@@ -176,7 +178,13 @@ class Calculator extends React.Component {
         if (nums.includes(global.bfr.slice(-1).toString()) && global.aft[0] == " "){
             console.warn("case 1: num before, blank after")
             if (nums.includes(entered_num)){
-                this.append_value(entered_num)
+                if (global.bfr.slice(-1).toString() ==  "0"){
+                    this.validate_backspace()
+                    this.append_value(entered_num)
+                }
+                else{
+                    this.append_value(entered_num)
+                }
             }
             else if (entered_num == "."){
                 this.append_value(entered_num)
@@ -280,8 +288,14 @@ class Calculator extends React.Component {
                 this.append_value(entered_num)
             }
             else{
-                this.validate_backspace()
-                this.append_value(entered_num)
+                if (global.aft[0] == "."){
+                    this.validate_backspace()
+                    this.append_value(entered_num+".")
+                }
+                else{
+                    this.validate_backspace()
+                    this.append_value(entered_num)
+                }
             }
         }
         else if (global.bfr.slice(-1).toString() == "0" && global.bfr[global.bfr.length - 2] == " "){
@@ -293,8 +307,14 @@ class Calculator extends React.Component {
                 this.append_value(entered_num)
             }
             else{
-                this.validate_backspace()
-                this.append_value(entered_num)
+                if (global.aft[0] == "."){
+                    this.validate_backspace()
+                    this.append_value(entered_num+".")
+                }
+                else{
+                    this.validate_backspace()
+                    this.append_value(entered_num)
+                }
             }
         }
         else if (global.bfr.length === 0 &&  nums.includes(global.aft[0])){
@@ -390,9 +410,13 @@ class Calculator extends React.Component {
                     const prev_currect_equation_string = global.prev_currect_equation.toString()
                     global.prev_currect_equation = "= " + prev_currect_equation_string
                 } catch (error) {}
+
+
             }
             else{
+                console.log("eval prev blank")
                 global.prev_currect_equation = ""
+                // global.prev_currect_equation = "h"
                 // global.equal_pressed = "0"
             }
         }
@@ -407,6 +431,7 @@ class Calculator extends React.Component {
 
     validate_backspace(prop){
         if (global.equal_pressed == "1"){
+            // console.log("vb")
             global.equal_pressed = "0"
         }
         
@@ -431,7 +456,7 @@ class Calculator extends React.Component {
             global.after = global.after+global.aft[i]
         }
 
-        const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ", "", "undefined"]
+        const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         const operators = ["+", "-", "×", "÷"]
 
         if (global.bfr.slice(-1).toString() == " " && operators.includes(global.aft[0])){
@@ -462,11 +487,16 @@ class Calculator extends React.Component {
             this.backspace("")
             this.backspace("")
         }
-        else if (global.bfr.slice(-1).toString() == "0" && global.aft[0] == "."){
-            this.state.selection.start = this.state.selection.start+1
-            this.state.selection.end = this.state.selection.end+1
-            this.backspace("")
-            this.backspace("")
+        else if (nums.includes(global.bfr.slice(-1).toString()) && global.aft[0] == "."){
+            if (nums.includes(global.bfr[global.bfr.length - 2])){
+                this.backspace("")
+            }
+            else{
+                this.state.selection.start = this.state.selection.start+1
+                this.state.selection.end = this.state.selection.end+1
+                this.backspace("")
+                this.backspace("")
+            }
         }
         else{
             this.backspace("")
@@ -541,6 +571,7 @@ class Calculator extends React.Component {
     check_operators(){
         // console.log('myfnc')
         console.log("global.currect_equation")
+        console.log("2 here")
         console.log(global.currect_equation.split(""))
 
         const crr = global.currect_equation.split("")
@@ -550,6 +581,42 @@ class Calculator extends React.Component {
                 console.log('opt at start')
                 global.currect_equation = global.currect_equation.slice(3)
             }
+        }
+        
+
+        // if (global.equal_pressed == "1"){
+        //     global.prev_currect_equation = ""
+        // }
+    }
+
+    check_zero(){
+        // if (global.equal_pressed == "1"){
+        //     global.equal_pressed = "0"
+        // }
+        
+        global.currect_equation1 = global.currect_equation
+        const gbl = global.currect_equation1.split("")
+
+        global.bfr = gbl.slice(0, this.state.selection.start)
+        global.aft = gbl.slice(this.state.selection.end)
+        
+        global.lenbfr = bfr.length;
+        global.before = ""
+        for (let i=0; i<=global.lenbfr-1; i++){
+            global.before = global.before+global.bfr[i]
+        }
+
+        global.lenaft = aft.length;
+        global.after = ""
+        for (let i=0; i<=global.lenaft-1; i++){
+            global.after = global.after+global.aft[i]
+        }
+
+        const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        const operators = ["+", "-", "×", "÷"]
+
+        if (global.bfr.slice(-1).toString() == "0" && global.bfr[global.bfr.length - 2] == " " &&  nums.includes(global.aft[0])){
+            this.validate_backspace()
         }
     }
 
@@ -570,24 +637,24 @@ class Calculator extends React.Component {
                     <View style={[{ flex: 1, flexWrap: 'nowrap'}]}>
 
                         {/* spacing */}
-                        <View style={[{flex: 1, backgroundColor: 'orange'}]}></View> 
+                        <View style={[{flex: 1}]}></View> 
 
 
                         {/* main text view set starts here */}
-                            <View style={[{flexDirection: 'row', backgroundColor: 'rgba(135, 160, 190, 0.4)', backgroundColor: 'blue', borderWidth: 1}]}>
+                            <View style={[{flexDirection: 'row', backgroundColor: 'rgba(135, 160, 190, 0.4)', borderWidth: 1}]}>
                                 <ScrollView>
-                                    <TextInput value={global.currect_equation} multiline selection={this.state.selection} autoFocus keyboardType="decimal-pad" showSoftInputOnFocus={false}  onSelectionChange={({ nativeEvent: { selection } }) => {this.setState({ selection })}}  onChangeText={(this.evaluation_prev(), this.check_operators())} style={[{fontSize: 28, textAlign: 'right', color: 'white', flexWrap: 'wrap', height: global.he*0.27}]} ></TextInput>
+                                    <TextInput value={global.currect_equation} multiline selection={this.state.selection} autoFocus keyboardType="decimal-pad" showSoftInputOnFocus={false}  onSelectionChange={({ nativeEvent: { selection } }) => {this.setState({ selection })}}  onChangeText={(this.evaluation_prev(), this.check_operators(), this.check_zero())} style={[{fontSize: 28, textAlign: 'right', color: 'white', flexWrap: 'wrap', height: global.he*0.27}]} ></TextInput>
                                 </ScrollView>
                             </View>
                         {/* main text view set ends here */}
 
 
                         {/* spacing */}
-                        <View style={[{flex: 1, backgroundColor: 'orange', flexDirection: 'row'}]}></View>
+                        <View style={[{flex: 1, flexDirection: 'row'}]}></View>
 
 
                         {/* preview text view set starts here */}
-                        <View style={[{flexDirection: 'row', backgroundColor: 'rgba(80, 50, 190, 0.4)', backgroundColor: 'red', borderWidth: 1}]}>
+                        <View style={[{flexDirection: 'row', backgroundColor: 'rgba(80, 50, 190, 0.4)', borderWidth: 1}]}>
                                 <ScrollView>
                                     <TextInput value={global.prev_currect_equation} multiline editable={false}  style={[{fontSize: 22, textAlign: 'right', color: 'rgb(211, 211, 211)', flexWrap: 'wrap', height: global.he*0.12}]} ></TextInput>
                                 </ScrollView>
@@ -596,19 +663,26 @@ class Calculator extends React.Component {
 
 
                         {/* spacing */}
-                        <View style={[{flex: 1, backgroundColor: 'orange', flexDirection: 'row'}]}></View>
+                        <View style={[{flex: 1, flexDirection: 'row'}]}></View>
 
 
                         {/* buttons view set starts here */}
                             <View style={[{justifyContent: 'center', flexDirection: 'row', justifyContent: 'flex-start'}]}>
 
-                                <Pressable onPress={() => this.props.navigation.navigate('Change_Background_Screen')} style={[{backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 50, justifyContent: 'center', marginLeft: '3%'}]}>
+                                {/* <Pressable onPress={() => this.props.navigation.navigate('Change_Background_Screen')} style={[{backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 50, justifyContent: 'center', marginLeft: '3%'}]}>
                                     <Text style={[{fontSize: 30, color: 'black', margin: 8.5, marginHorizontal: 12}]}>🖼️</Text>
-                                    {/* <Image source={img} height="3" width="3"></Image> */}
+                                </Pressable> */}
+
+                                {/* <Pressable onPress={() => this.props.navigation.navigate('Change_Background_Screen')} style={[{backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 50, justifyContent: 'center', marginLeft: '3%'}]}>
+                                    <Image source={imgico} style={[{flex:1, aspectRatio: 1/1, margin: 5}]}></Image>
+                                </Pressable> */}
+                                
+                                <Pressable style={[{backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 50, justifyContent: 'center', marginLeft: '3%'}]}>
+                                    <Image source={imgico} style={[{flex:1, aspectRatio: 1/1, margin: 5}]}></Image>
                                 </Pressable>
 
                                 {/* spacing */}
-                                <View style={[{flex: 1, backgroundColor: 'black'}]}></View>
+                                <View style={[{flex: 1}]}></View>
                                 
                                 <Pressable onPress={() => this.validate_backspace("")} style={[{backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 50, justifyContent: 'center', marginRight: '3%'}]}>
                                     <Text style={[{fontSize: 30, color: 'black', margin: 8.5, marginHorizontal: 12}]}>⌫</Text>
@@ -619,18 +693,18 @@ class Calculator extends React.Component {
 
                         
                         {/* spacing */}
-                        <View style={[{flex: 1, backgroundColor: 'orange'}]}></View>
+                        <View style={[{flex: 1}]}></View>
 
                         
                         {/* main buttons coverage starts here */}
                             <View style={[{flexDirection: 'row'}]}>
 
                                 {/* spacing */}
-                                <View style={[{flex: 1, backgroundColor: 'orange'}]}></View>
+                                <View style={[{flex: 1}]}></View>
 
 
                                 {/* main buttons view set starts here */}
-                                    <View style={[{aspectRatio: 1/1.23, justifyContent: 'space-evenly', backgroundColor: 'pink', height: global.he}]}>
+                                    <View style={[{aspectRatio: 1/1.23, justifyContent: 'space-evenly', height: global.he}]}>
 
                                         {/* first view set starts here */}
                                             <View style={[{flexDirection: 'row', justifyContent: 'space-evenly'}]}>
@@ -735,13 +809,13 @@ class Calculator extends React.Component {
 
 
                                 {/* spacing */}
-                                <View style={[{flex: 1, backgroundColor: 'orange'}]}></View>
+                                <View style={[{flex: 1}]}></View>
 
                             </View>
                         {/* main buttons coverage ends here */}
 
                     {/* spacing */}
-                    <View style={[{flex: 1, backgroundColor: 'orange'}]}></View>
+                    <View style={[{flex: 1}]}></View>
             
                     </View>
 
