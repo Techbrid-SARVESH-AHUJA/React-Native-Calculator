@@ -75,7 +75,7 @@ class Calculator extends React.Component {
         if (global.before == []){
             console.log('blank before')
             if (prop == " + " || prop == " - " || prop == " × " || prop == " ÷ "){
-                ToastAndroid.show("Cannot add an operator in starting", ToastAndroid.SHORT);
+                // ToastAndroid.show("Cannot add an operator in starting", ToastAndroid.SHORT);
             }
             else{
                 global.currect_equation = global.before + prop + global.after
