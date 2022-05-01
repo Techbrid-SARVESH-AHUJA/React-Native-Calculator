@@ -1,16 +1,32 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, ImageBackground, TextInput, ScrollView, ToastAndroid, Keyboard, Button, Image, Dimensions} from "react-native";
+
 import Realm from "realm";
 
+// global current_equation
+// global.currect_equation = '566621221112 × 22 × 3 - + 4316549 × 1326459 × 16551994 + 978645123 ÷ 12654 + 654899645444';
+// global.currect_equation = '32+33-65×32÷6549+312654×22+24÷321-658×3256÷326156498+65456312×325555÷3×564589-654888';
+// global.currect_equation = '32 + 33 - 65 × 32 ÷ 6549 + 312654 × 22 + 24 ÷ 321 - 658 × 3256 ÷ 326156498 + 65456312 × 325555 ÷ 3 × 564589 - 654888';
+// global.currect_equation = '30 + 2 + 3456 + 9987'
 global.currect_equation = '';
 global.currect_equation1 = '';
 global.prev_currect_equation = "";
 
+// import Apps from './Appico'
+// import MainActivity from './MainActivity' ;
+
+// const va = "hello"
 
 const bgimg = require('../assets/mybg.webp');
+// const bgimg = require('../assets/my')
+// const bgimg = { uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Salto_del_Angel-Canaima-Venezuela08.JPG/1200px-Salto_del_Angel-Canaima-Venezuela08.JPG" };
+// const img = require('../assets/mybg1.webp');
+// const img1 = require('../assets/mybg.webp');
 const imgico_image = require('../assets/imageicon.png');
 const imgico_backspace = require('../assets/backspace.png');
 const imgico_clock = require('../assets/clock.png');
+
+const windowHeight = Dimensions.get('window').height;
 
 global.h = "0"
 global.he = 0
@@ -27,12 +43,14 @@ global.current_number = ""
 
 global.equal_pressed = "0"
 
+global.tsks = ""
+const tsks = ""
 global.dby0 = "0"
 
 
-// console.log("")
-// console.log("starts here")
-// console.log("")
+console.log("")
+console.log("starts here")
+console.log("")
 
 
 const BIMG = {
@@ -43,6 +61,10 @@ const BIMG = {
     },
     primaryKey: "_id",
 };
+
+
+// console.log('err')
+// export {TaskSchema}
 
 (async () => {
 const realm = await Realm.open({
@@ -126,8 +148,9 @@ class Calculator extends React.Component {
         console.log(global.after)
 
         if (global.before == []){
-            // console.log('blank before')
+            console.log('blank before')
             if (prop == " + " || prop == " - " || prop == " × " || prop == " ÷ "){
+                // ToastAndroid.show("Cannot add an operator in starting", ToastAndroid.SHORT);
             }
             else{
                 global.currect_equation = global.before + prop + global.after
@@ -194,6 +217,35 @@ class Calculator extends React.Component {
                 this.state.selection.end = this.state.selection.end-1
             }
         }
+
+
+        // global.currect_equation1 = global.currect_equation
+        // const gbl = global.currect_equation1.split("")
+        // // console.log("gbl last: " + gbl[gbl.length - 0])
+        // console.log(gbl.slice(0, this.state.selection.start))
+        // console.log(gbl.slice(this.state.selection.end))
+        // global.bfr = gbl.slice(0, this.state.selection.start)
+        // global.aft = gbl.slice(this.state.selection.end)
+        // console.log()
+        // if (gbl[gbl.length - 1] == "+" || gbl[gbl.length - 1] == "-" || gbl[gbl.length - 1] == "×" || gbl[gbl.length - 1] == "÷"){
+        //     if (prop == " + " || prop == " - " || prop == " × " || prop == " ÷ "){
+        //         // console.warn('same operator used')
+        //         // global.currect_equation = global.currect_equation+"p"
+        //         prop = ""
+        //     }
+        // }
+        // global.currect_equation = global.currect_equation+prop
+        // global.lenbfr = bfr.length;
+        // global.before = ""
+        // for (let i=0; i<=global.lenbfr-1; i++){
+        //     global.before = global.before+global.bfr[i]
+        // }
+
+        // global.lenaft = aft.length;
+        // global.after = ""
+        // for (let i=0; i<=global.lenaft-1; i++){
+        //     global.after = global.after+global.aft[i]
+        // }
     }
 
     validate_value(entered_num){
@@ -236,6 +288,11 @@ class Calculator extends React.Component {
         console.log("len after")
         console.log(global.lenaft)
 
+        // for (let i=0; i<=global.lenaft-1; i++){
+        //     global.numafter = global.numafter + global.aft[i]
+        //     global.numafter = global.numafter.split("")
+        // }
+
         console.log("")
         console.log("global.numafter")
         console.log(global.aft)//list format
@@ -245,6 +302,8 @@ class Calculator extends React.Component {
         console.log("global.numbefore")
         console.log(global.bfr)//list format
         console.log("")
+
+        
 
         if (nums.includes(global.bfr.slice(-1).toString()) && global.aft[0] == " "){
             console.warn("case 1: num before, blank after")
@@ -290,6 +349,8 @@ class Calculator extends React.Component {
             console.warn("case 3: operator before, blank after")
             if (nums.includes(entered_num)){
                 if (entered_num == "0"){
+                    // this.state.selection.start = this.state.selection.start+1
+                    // this.state.selection.end = this.state.selection.end+1
                     this.append_value("")
                 }
                 else{
@@ -302,7 +363,10 @@ class Calculator extends React.Component {
                 this.state.selection.start = this.state.selection.start+1
                 this.state.selection.end = this.state.selection.end+1
                 this.append_value("0.")
+                // this.state.selection.start = this.state.selection.start+1
+                // this.state.selection.end = this.state.selection.end+1
                 this.append_value("")
+                // console.log('here')
             }
             else{
                 this.state.selection.start = this.state.selection.start+1
@@ -390,6 +454,7 @@ class Calculator extends React.Component {
                 this.append_value("0.")
                 this.state.selection.start = this.state.selection.start+1
                 this.state.selection.end = this.state.selection.end+1
+                // this.append_value("")
             }
             else {
                 this.append_value(entered_num)
@@ -407,9 +472,15 @@ class Calculator extends React.Component {
                 this.append_value(entered_num)
             }
         }
+        // else if (){
+        //     console.warn("case 9: operator before, blank after")
+        // }
         else{ 
             this.append_value(entered_num)
         }
+
+        
+
     }
 
     clear_value(prop) {
@@ -439,6 +510,7 @@ class Calculator extends React.Component {
 
                 if (global.currect_equation == "Infinity" || global.currect_equation == "-Infinity"){
                     global.dby0 = "1"
+                    // global.currect_equation = currect_equation_string
 
                     while(this.state.mainval.includes("*") || this.state.mainval.includes("/")){
                         this.state.mainval = this.state.mainval.replace('*', '×')
@@ -447,6 +519,9 @@ class Calculator extends React.Component {
 
                     global.currect_equation = this.state.mainval
                     this.state.mainval = this.state.mainval
+
+                    // this.state.mainval = currect_equation_string
+                    // this.state.mainval = global.currect_equation
                 }
                 else{
                     global.currect_equation = currect_equation_string
@@ -455,6 +530,7 @@ class Calculator extends React.Component {
                     console.log("currect_equation_string: " + currect_equation_string)
 
                     this.setState({ mainval: this.state.mainval })
+                    // global.prev_currect_equation = "= "
 
                     this.state.selection.start = global.currect_equation.length
                     this.state.selection.end = global.currect_equation.length
@@ -475,16 +551,33 @@ class Calculator extends React.Component {
     evaluation_prev(){
         try {
             if (global.equal_pressed == "0"){
+                // for (let i=0; i<=this.state.mainval.split("").length(); i++){
+                //     console.log(i)
+                // }
+                // console.log(this.state.mainval.split("").length())
+
+                // this.state.mainval = this.state.mainval.replace('×', '*')
+                // this.state.mainval = this.state.mainval.replace('÷', '/')
 
                 console.log("")
                 console.log("this.state.mainval")
                 console.log(this.state.mainval.length)
                 console.log("")
 
+                // for (let i=0; i<=this.state.mainval.length; i++){
+                //     if (this.state.mainval.includes("×") || this.state.mainval.includes("÷")){
+                //         this.state.mainval = this.state.mainval.replace('×', '*')
+                //         this.state.mainval = this.state.mainval.replace('÷', '/')
+                //     }
+                // }
+
                 while(this.state.mainval.includes("×") || this.state.mainval.includes("÷")){
                     this.state.mainval = this.state.mainval.replace('×', '*')
                     this.state.mainval = this.state.mainval.replace('÷', '/')
                 }
+
+                // console.log(this.state.mainval)
+                // console.log(eval(this.state.mainval))
 
                 global.prev_currect_equation = eval(this.state.mainval)
 
@@ -498,6 +591,8 @@ class Calculator extends React.Component {
             else{
                 console.log("eval prev blank")
                 global.prev_currect_equation = ""
+                // global.prev_currect_equation = "h"
+                // global.equal_pressed = "0"
             }
         }
         catch (error) {
@@ -506,11 +601,14 @@ class Calculator extends React.Component {
             console.warn(error)
             global.prev_currect_equation = ""
         }
+        // global.prev_currect_equation = "hello1"
+        // this.setState({ prevval: global.prev_currect_equation })
         console.log("eval prev")
     }
 
     validate_backspace(prop){
         if (global.equal_pressed == "1"){
+            // console.log("vb")
             global.equal_pressed = "0"
         }
         
@@ -648,18 +746,34 @@ class Calculator extends React.Component {
     }
 
     check_operators(){
+        // console.log('myfnc')
+        console.log("global.currect_equation")
+        console.log("2 here")
+        console.log(global.currect_equation.split(""))
 
         const crr = global.currect_equation.split("")
+        console.log('')
+        console.log('crr')
+        console.log(crr)
+        console.log('')
 
         if (crr[0] == " " && crr[2] == " "){
             if (crr[1] == "+" || crr[1] == "-" || crr[1] == "×" || crr[1] == "÷"){
-                // console.log('opt at start')
+                console.log('opt at start')
                 global.currect_equation = global.currect_equation.slice(3)
             }
         }
+        
+
+        // if (global.equal_pressed == "1"){
+        //     global.prev_currect_equation = ""
+        // }
     }
 
     check_zero(){
+        // if (global.equal_pressed == "1"){
+        //     global.equal_pressed = "0"
+        // }
         
         global.currect_equation1 = global.currect_equation
         const gbl = global.currect_equation1.split("")
@@ -690,6 +804,14 @@ class Calculator extends React.Component {
     render() {
         return(
             <View onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }} style={[styles.main, {}]}>
+
+            {/* <Button title="Go to Profile Activity" onPress={() => this.props.navigation.navigate('Apps')} /> */}
+            {/* <Text> */}
+            {/* <Icon style={{ alignItems: "center", justifyContent: "center", textAlign: "right" }} name="keyboard-arrow-down" type="MaterialIcons" /> */}
+            {/* <Icon name='rowing'></Icon>
+            </Text> */}
+            
+            {/* <Text>{va}</Text> */}
 
                 <ImageBackground source={bgimg} resizeMode="cover" style={styles.image}>
 
